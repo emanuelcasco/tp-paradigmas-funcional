@@ -81,4 +81,5 @@ rescatarse horas cliente
 ---
 
 aplicarItinerario :: [(Cliente -> Cliente)] -> Cliente -> Cliente
-aplicarItinerario itinerario cliente = foldr ($) cliente (reverse itinerario) 
+--aplicarItinerario itinerario cliente = foldr ($) cliente (reverse itinerario)
+aplicarItinerario itinerario  = foldl1 (.) itinerario
