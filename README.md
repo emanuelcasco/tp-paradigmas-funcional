@@ -1,13 +1,25 @@
 Trabajo practico integrador - Paradigmas de programación
 ===============
 
+Para cargar el modulo de pruebas:
+
+```
+ghci -i./src test/NightClubSpec.hs 
+```
+
+Luego corremos las pruebas con:
+
+```haskell
+testAll
+```
+
 ## Sobre el proyecto
 
 Proyecto desarrollado por Emanuel Casco y Ailin Venerus para el curso K2004 de Paradigmas de Programación de la Universidad Tecnológica Nacional Facultad Regional de Buenos Aires (FRBA). 
 
 ## Licencia
 
-**tp-paradigmas-funcional-2017** is available under the MIT [license](LICENSE).
+**tp-paradigmas-funcional** is available under the MIT [license](LICENSE).
 
     Copyright (c) 2017 Emanuel Casco <cascoemanuel@gmail.com> and Ailin Venerus <ailinvenerus@gmail.com>
 
