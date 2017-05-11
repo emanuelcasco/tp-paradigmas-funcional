@@ -74,7 +74,7 @@ testAll = hspec $ do
     it "Si Ana se rescata por menos de 0 horas debería aparecer un error" $ do
       evaluate ( (resistencia . rescatarse (-1)) ana ) `shouldThrow` anyException
 
-  let anaElDiaDespues = aplicarItinerario [tomarJarraLoca, (tomarKlusener "Chocolate"), (rescatarse 2), (tomarKlusener "Huevo")] ana
+  let anaElDiaDespues = aplicarItinerario itinerarioAna ana
   describe "[Verificar punto 7] Ana toma una jarra loca, un klusener de chocolate, se rescata 2 horas y luego toma un klusener de huevo." $ do
     it "Su resistencia queda en 196" $ do
       resistencia anaElDiaDespues `shouldBe` 196

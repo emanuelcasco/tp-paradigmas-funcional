@@ -19,6 +19,8 @@ marcos = UnCliente { nombre = "Marcos", resistencia = 40, amigos = [rodri] }
 cristian = UnCliente { nombre = "Cristian", resistencia = 2, amigos = [] }
 ana = UnCliente { nombre = "Ana", resistencia = 120, amigos = [marcos,rodri] }
 
+itinerarioAna = [tomarJarraLoca, (tomarKlusener "Chocolate"), (rescatarse 2), (tomarKlusener "Huevo")]
+
 ---
 
 comoEsta :: Cliente -> String
@@ -43,7 +45,7 @@ modificarNombre :: String -> Cliente -> Cliente
 modificarNombre nuevoNombre cliente = cliente { nombre = nuevoNombre }
 
 modificarResistencia :: (Int -> Int -> Int) -> Int -> Cliente -> Cliente
-modificarResistencia operation dif cliente = cliente { resistencia = operation (resistencia cliente) dif }
+modificarResistencia operation valor cliente = cliente { resistencia = (resistencia cliente) `operation` valor }
 
 modificarAmigos :: (Cliente -> Cliente) -> Cliente -> Cliente
 modificarAmigos function cliente = cliente { amigos = (map function . amigos) cliente }
