@@ -72,6 +72,7 @@ chuckNorris = UnCliente {
   amigos = [ana],
   tragos = [ tomarSoda x | x <- [1..] ]
 }
+
 {-
 Justificar: ¿Puede chuckNorris pedir otro trago con la función dameOtro?
 La funcion `dameOtro` no sera valida con chuck, ya que el compilador intentara reducir una lista infinita para encontrar el ultimo elementos
@@ -80,7 +81,7 @@ Si, gracias al `lazy evaluation` de Haskell, al no necesitar la lista de tragos 
 Justificar: ¿puedo preguntar si chuckNorris tiene más resistencia que ana?
 Si, exactamente por lo mismo del punto anterior
 -}
--- 
+
 ---
 
 comoEsta :: Cliente -> String
