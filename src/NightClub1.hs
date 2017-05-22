@@ -124,9 +124,9 @@ tomarSoda fuerza cliente = agregarTrago (tomarSoda fuerza) $ modificarNombre nue
   where nuevoNombre = "e" ++ replicate fuerza 'r' ++ "p" ++ nombre cliente
 
 tomarJarraPopular :: Int -> Trago
-tomarJarraPopular 0 cliente = cliente
-tomarJarraPopular espirituosidad cliente = tomarJarraPopular (espirituosidad - 1) (hacerseAmigo cliente)
-
+tomarJarraPopular espirituosidad cliente
+  |  espirituosidad == 0 = agregarTrago (tomarJarraPopular espirituosidad) cliente
+  |  otherwise = tomarJarraPopular (espirituosidad - 1) (hacerseAmigo cliente)
 ---
 
 rescatarse :: Int -> Cliente -> Cliente
