@@ -85,69 +85,97 @@ testAll = hspec $ do
 ---          TESTS SEGUNDA PARTE TP FUNCIONAL          ---
 ----------------------------------------------------------
 
-  describe "[TP Nº 2] Verificar punto 1.a." $ do
+  describe "[TP Nº 2] Verificar punto 1.a:" $ do
      it "Rodri tomó un tintico" $ do
         tomarTragos (tragos rodri) rodri `shouldBe` tomarTintico rodri
   
-  describe "[TP Nº 2] Verificar punto 1.b." $ do
+  describe "[TP Nº 2] Verificar punto 1.b:" $ do
      it "Rodri tomó un tintico" $ do
-        (length . tragos) (tomarGrogXD ana) `shouldBe` 1 
+        (length . tragos . tomarGrogXD) ana `shouldBe` 1 
+     it "Marcos toma una soda de nivel 3 y queda con 2 bebidas" $ do
+        (length . tragos . tomarSoda 3) marcos `shouldBe` 2
+     it "Marcos toma una soda de nivel 3 y queda con 40 de resistencia" $ do
+        (resistencia . tomarSoda 3) marcos `shouldBe` 40
 
   let anaElDiaDespues = tomarTragos [tomarJarraLoca, tomarKlusener "Chocolate", rescatarse 2, tomarKlusener "Huevo"] ana
-  describe "[TP Nº 2] Verificar punto 1.c: Ana toma una jarra loca, un klusener de chocolate, se rescata 2 horas y luego toma un klusener de huevo." $ do
-     it "Su resistencia queda en 196" $ do
+  describe "[TP Nº 2] Verificar punto 1.c:" $ do
+     it "Ana toma una jarra loca, un klusener de chocolate, se rescata 2 horas y luego toma un klusener de huevo: Su resistencia queda en 196" $ do
         resistencia anaElDiaDespues `shouldBe` 196
-     it "Quedan como amigos: Marcos (30 de resistencia) y Rodri (45 de resistencia)" $ do
+     it "Ana toma una jarra loca, un klusener de chocolate, se rescata 2 horas y luego toma un klusener de huevo: Quedan como amigos Marcos (30 de resistencia) y Rodri (45 de resistencia)" $ do
         (map resistencia . amigos) anaElDiaDespues `shouldBe` [30, 45]
-     it "En su lista de tragos ahora hay 3 elementos" $ do
+     it "Ana toma una jarra loca, un klusener de chocolate, se rescata 2 horas y luego toma un klusener de huevo: En su lista de tragos ahora hay 3 elementos" $ do
         (length . tragos) anaElDiaDespues `shouldBe` 3
+     it "Rodri toma una soda de nivel 1 y una soda de nivel 2 y queda con nombre errperpRodri" $ do
+        (nombre . tomarSoda 2 . tomarSoda 1) rodri `shouldBe` "errperpRodri"
+     it "Marcos toma un klusener de huevo, un tintico y una jarraLoca y queda con 30 de resistencia" $ do
+        (resistencia . tomarJarraLoca . tomarTintico . tomarKlusener "Huevo" ) marcos `shouldBe` 30
+     it "Marcos toma un klusener de huevo, un tintico y una jarraLoca y queda con 4 bebidas en el historial" $ do
+        (length . tragos . tomarJarraLoca . tomarTintico . tomarKlusener "Huevo" ) marcos `shouldBe` 4
 
-  describe "[TP Nº 2] Verificar punto 1.d: Con `dameOtro` marcos vuelve a tomar la ultima bebida de su lista" $ do
-     it "La resistencia de Marcos pasa a ser 34" $ do
+  describe "[TP Nº 2] Verificar punto 1.d:" $ do
+     it "Marcos pide “dame otro” y lo deja con 34 de resistencia" $ do
         (resistencia . dameOtro) marcos `shouldBe` 34
-     it "Este trago se suma a su lista, pasando este a tener 2 elementos" $ do
+     it "Marcos pide “dame otro” y tiene 2 bebidas en el historial" $ do
         (length . tragos . dameOtro) marcos `shouldBe` 2
      it "Ana pide `dameOtro`, debe dar error" $ do
         evaluate (dameOtro ana) `shouldThrow` anyException
-     it "Rodri toma una soda de fuerza 1, `dameOtro` hace que tenga 3 elementos en su lista de tragos" $ do
+     it "Rodri toma una soda de nivel 1, y “dame otro” da como resultado que tiene 3 bebidas" $ do
          (length . tragos . dameOtro . tomarSoda 1) rodri `shouldBe` 3
+     it "Rodri toma una soda de nivel 1, y “dame otro” da como resultado que su nombre queda “erperpRodri”" $ do
+         (nombre . dameOtro . tomarSoda 1) rodri `shouldBe` "erperpRodri"
 
   describe "[TP Nº 2] Verificar punto 2: `cuantasPuedeTomar`" $ do
      it "Rodri puede tomar dos tragos, entre un grogXD, un tintico y un klusener de frutilla" $ do
          cuantasPuedeTomar [tomarGrogXD, tomarTintico, tomarKlusener "Frutilla"] rodri `shouldBe` 2
      it "Cristian no puede tomar un trago, entre un tintico y un klusener de huevo" $ do
          cuantasPuedeTomar [tomarGrogXD, tomarTintico, tomarKlusener "Huevo"] cristian `shouldBe` 1
+     it "Rodri puede tomar una sola bebida entre un grog XD, un tintico, un klusener de fru..utilla" $ do
+         cuantasPuedeTomar [tomarGrogXD, tomarTintico, tomarKlusener "fruuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuutilla"] rodri `shouldBe` 1
 
-  describe "[TP Nº 2] Verificar punto 3" $ do
-     it "Ana realiza una salida de amigos, debe quedar con 1 amigo" $ do
-         (length . amigos . realizarItinerario salidaDeAmigos) ana `shouldBe` 3
-     it "Ana realiza una salida de amigos, ahora se llama 'erpAna'" $ do
-         (nombre . realizarItinerario salidaDeAmigos) ana `shouldBe` "erpAna"
-     it "Ana realiza una salida de amigos, debe quedar con 125 de Resistencia" $ do
-         (resistencia . realizarItinerario salidaDeAmigos) ana `shouldBe` 125
-     it "Ana realiza una salida de amigos, ahora es amiga de Roberto Carlos" $ do
-         (amigos . realizarItinerario salidaDeAmigos) ana `shouldSatisfy` elem robertoCarlos
+  describe "[TP Nº 2] Verificar punto 3:" $ do
+     it "Rodri realiza una salida de amigos, debe quedar con 1 amigo" $ do
+         (length . amigos . realizarItinerario salidaDeAmigos) rodri `shouldBe` 1
+     it "Rodri hace una salida de amigos y se debe llamar “erpRodri”" $ do
+         (nombre . realizarItinerario salidaDeAmigos) rodri `shouldBe` "erpRodri"
+     it "Rodri realiza una salida de amigos, debe quedar con 45 de Resistencia" $ do
+         (resistencia . realizarItinerario salidaDeAmigos) rodri `shouldBe` 45
+     it "Rodri realiza una salida de amigos, ahora es amigo de Roberto Carlos" $ do
+         (amigos . realizarItinerario salidaDeAmigos) rodri `shouldSatisfy` elem robertoCarlos
+     it "Rodri realiza una salida de amigos, su amigo Roberto Carlos debe quedar con 155 de resistencia" $ do
+         (resistencia . head . amigos . realizarItinerario salidaDeAmigos) rodri `shouldBe` 155
+     it "Rodri realiza una salida de amigos, debe quedar con 4 bebidas en su historial" $ do
+         (length . tragos . realizarItinerario salidaDeAmigos) rodri `shouldBe` 4
 
-  describe "[TP Nº 2] Verificar punto 4" $ do
-     it "Rodri puede tomar dos tragos, entre un grogXD, un tintico y un klusener de frutilla" $ do
+  describe "[TP Nº 2] Verificar punto 4.a:" $ do
+     it "La intensidad del itinerario basico es 0.8" $ do
          intensidadItinerario itinerarioBasico `shouldBe` 0.8
-     it "Rodri puede tomar dos tragos, entre un grogXD, un tintico y un klusener de frutilla" $ do
+     it "La intensidad de la mezcla explosiva es 1.6" $ do
          intensidadItinerario mezclaExplosiva `shouldBe` 1.6
-     it "Rodri puede tomar dos tragos, entre un grogXD, un tintico y un klusener de frutilla" $ do
+     it "La intensidad de la salidaDeAmigos es 4.0" $ do
          intensidadItinerario salidaDeAmigos `shouldBe` 4.0
+
+  describe "[TP Nº 2] Verificar punto 4.b:" $ do
      it "El itinerario más intenso, de los conocidos, es la salida de amigos" $ do
          (descripcion . itinerarioMasIntenso) [salidaDeAmigos, mezclaExplosiva, itinerarioBasico] `shouldBe` "Salida de amigos"
+     it "Rodri hace el itinerario más intenso entre una salida de amigos, la mezcla explosiva y el itinerario básico y queda con el nombre 'erpRodri'" $ do
+         (nombre . realizarItinerario ((itinerarioMasIntenso) [salidaDeAmigos, mezclaExplosiva, itinerarioBasico])) rodri `shouldBe` "erpRodri"
+     it "Rodri hace el itinerario más intenso entre una salida de amigos, la mezcla explosiva y el itinerario básico y queda con resistencia 45" $ do
+         (resistencia . realizarItinerario ((itinerarioMasIntenso) [salidaDeAmigos, mezclaExplosiva, itinerarioBasico])) rodri `shouldBe` 45
+     it "Rodri hace el itinerario más intenso entre una salida de amigos, la mezcla explosiva y el itinerario básico  y queda con un amigo (Roberto Carlos)" $ do
+         (map nombre . amigos . realizarItinerario ((itinerarioMasIntenso) [salidaDeAmigos, mezclaExplosiva, itinerarioBasico])) rodri `shouldBe` ["Roberto Carlos"]
 
-  describe "[TP Nº 2] Verificar punto 5: Chuck 'The God' Norris" $ do
+  describe "[TP Nº 2] Verificar punto 5:" $ do
      it "La resistencia de Chuck es mayor a la de Ana" $ do
          resistencia chuckNorris `shouldSatisfy` (> resistencia ana)
      it "Chuck realiza un itinerario basico, al finalizar su resistencia es 1076" $ do
          (resistencia . realizarItinerario itinerarioBasico) chuckNorris `shouldBe` 1076
 
-  describe "[TP Nº 2] Verificar punto 6: Jarra Popular" $ do
+  describe "[TP Nº 2] Verificar punto 6:" $ do
       it "Roberto Carlos se hace amigo de Ana, toma una jarra popular de espirituosidad 0, sigue teniendo una sola amiga (Ana)" $ do
          (length . amigos . tomarJarraPopular 0 . reconocerAmigo ana) robertoCarlos `shouldBe` 1
-      it "Roberto Carlos se hace amigo de Ana, toma una jarra popular de espirituosidad 1, ganó dos amigos" $ do
+      it "Roberto Carlos se hace amigo de Ana, toma una jarra popular de espirituosidad 1, ganó dos amigos (3)" $ do
          (length . amigos . tomarJarraPopular 1 . reconocerAmigo ana) robertoCarlos `shouldBe` 3
       it "Roberto Carlos se hace amigo de Ana, toma una jarra popular de espirituosidad 1, sus nuevos amigos son rodri y marcos" $ do
          (map nombre . amigos . tomarJarraPopular 1 . reconocerAmigo ana) robertoCarlos `shouldBe` ["Marcos", "Rodri", "Ana"]
+      it "Cristian se hace amigo de Ana. Roberto Carlos se hace amigo de Cristian, toma una jarra popular de espirituosidad 4, queda con 4 amigos (Cristian, Ana, Marcos y Rodri)" $ do
+         (map nombre . amigos . tomarJarraPopular 4 . reconocerAmigo (reconocerAmigo ana cristian)) robertoCarlos `shouldBe` ["Marcos","Rodri","Ana","Cristian"]

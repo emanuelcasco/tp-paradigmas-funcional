@@ -100,10 +100,10 @@ reconocerAmigo amigo cliente
   |  amigo == cliente || amigo `esAmigo` cliente = cliente
   |  otherwise = cliente { amigos =  amigo : amigos cliente }
 
----
-
 agregarTrago :: Trago -> Cliente -> Cliente
 agregarTrago trago = modificarTragos ((:) trago)
+
+---
 
 tomarGrogXD :: Trago
 tomarGrogXD = agregarTrago tomarGrogXD . modificarResistencia (*) 0
@@ -143,9 +143,9 @@ tomarTragos tragos  =  foldl1 (.) tragos
 
 dameOtro :: Cliente -> Cliente
 dameOtro cliente 
-  | not (null $ tragos cliente) = ultimoTrago cliente
+  | (not . null . tragos) cliente = ultimoTrago cliente
   | otherwise = error "Cliente no tomo nada"
-  where ultimoTrago = last $ tragos cliente
+  where ultimoTrago = (head . tragos) cliente
 
 ---
 
@@ -172,17 +172,17 @@ instance Ord Itinerario where
 mezclaExplosiva = UnItinerario { 
   descripcion = "Mezcla Explosiva", 
   duracion = 2.5, 
-  acciones = [tomarGrogXD, tomarGrogXD, tomarKlusener "Huevo", tomarKlusener "Frutilla"]
+  acciones = [tomarKlusener "Frutilla", tomarKlusener "Huevo", tomarGrogXD, tomarGrogXD]
 }
 itinerarioBasico = UnItinerario { 
   descripcion = "Basico", 
   duracion = 5, 
-  acciones = [tomarJarraLoca, tomarKlusener "Chocolate", rescatarse 2, tomarKlusener "Huevo"]
+  acciones = [tomarKlusener "Huevo", rescatarse 2, tomarKlusener "Chocolate", tomarJarraLoca]
 }
 salidaDeAmigos = UnItinerario { 
   descripcion = "Salida de amigos", 
   duracion = 1, 
-  acciones = [tomarSoda 1, tomarTintico, reconocerAmigo robertoCarlos, tomarJarraLoca]
+  acciones = [tomarJarraLoca, reconocerAmigo robertoCarlos, tomarTintico, tomarSoda 1]
 }
 
 realizarItinerario :: Itinerario -> Cliente -> Cliente
