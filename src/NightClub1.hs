@@ -19,8 +19,7 @@ instance Show Cliente where
   show cliente = "{ nombre: " ++ show (nombre cliente)
               ++ ", resistencia: " ++ show (resistencia cliente)
               ++ ", amigos: " ++ show (map nombre (amigos cliente))
-              ++ ", tragos: [Tragos x"++show (length . tragos $ cliente)++"]"
-          --    ++ ", tragos: " ++ show (tragos cliente)++" }"
+              ++ ", tragos: [Tragos x" ++ show (length . tragos $ cliente) ++ "]"
 
 modificarNombre :: String -> Cliente -> Cliente
 modificarNombre nuevoNombre cliente = cliente { nombre = nuevoNombre }
@@ -127,6 +126,7 @@ tomarJarraPopular :: Int -> Trago
 tomarJarraPopular espirituosidad cliente
   |  espirituosidad == 0 = agregarTrago (tomarJarraPopular espirituosidad) cliente
   |  otherwise = tomarJarraPopular (espirituosidad - 1) (hacerseAmigo cliente)
+  
 ---
 
 rescatarse :: Int -> Cliente -> Cliente
