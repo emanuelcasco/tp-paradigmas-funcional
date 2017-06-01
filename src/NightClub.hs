@@ -19,7 +19,7 @@ instance Show Cliente where
   show cliente = "{ nombre: " ++ show (nombre cliente)
               ++ ", resistencia: " ++ show (resistencia cliente)
               ++ ", amigos: " ++ show (map nombre (amigos cliente))
-              ++ ", tragos: [Tragos x" ++ show (length . tragos $ cliente) ++ "]"
+              ++ ", tragos: [Tragos x" ++ show (length . tragos $ cliente) ++ "] }"
 
 modificarNombre :: String -> Cliente -> Cliente
 modificarNombre nuevoNombre cliente = cliente { nombre = nuevoNombre }
@@ -144,14 +144,13 @@ tomarTragos tragos  =  foldl1 (.) tragos
 dameOtro :: Cliente -> Cliente
 dameOtro cliente 
   | (not . null . tragos) cliente = ultimoTrago cliente
-  | otherwise = error "Cliente no tomo nada"
+  | otherwise = error "Cliente no tomó nada"
   where ultimoTrago = (head . tragos) cliente
 
 ---
 
 cualesPuedeTomar :: [Trago] -> Cliente -> [Trago]
 cualesPuedeTomar listaTragos cliente = filter resistenciaMayorCero listaTragos
---cualesPuedeTomar listaTragos cliente = [ trago | trago <- listaTragos, resistenciaMayorCero trago]
   where resistenciaMayorCero trago = (resistencia . trago) cliente > 0
 
 cuantasPuedeTomar :: [Trago] -> Cliente -> Int
@@ -163,11 +162,7 @@ data Itinerario = UnItinerario {
   descripcion :: String,
   duracion :: Float,
   acciones :: [Cliente -> Cliente]
-} 
-instance Eq Itinerario where
-  (==) itinerario1 itinerario2 = intensidadItinerario itinerario1 == intensidadItinerario itinerario2
-instance Ord Itinerario where
-  compare itinerario1 itinerario2 = intensidadItinerario itinerario1 `compare` intensidadItinerario itinerario2
+}
 
 mezclaExplosiva = UnItinerario { 
   descripcion = "Mezcla Explosiva", 
@@ -187,7 +182,6 @@ salidaDeAmigos = UnItinerario {
 
 realizarItinerario :: Itinerario -> Cliente -> Cliente
 realizarItinerario itinerario = foldl1 (.) (acciones itinerario)
---Acá podriamos usar `tomarTragos` pero un itinerario podría incluir acciones que no son un trago, como `rescatarse`.
 
 ----
 
@@ -197,7 +191,11 @@ intensidadItinerario itinerario = genericLength (acciones itinerario) / duracion
 ----
 
 itinerarioMasIntenso :: [Itinerario] -> Itinerario
-itinerarioMasIntenso = maximum
+itinerarioMasIntenso = foldl1 itinerarioConMasIntensidad 
+
+itinerarioConMasIntensidad i1 i2 
+  | intensidadItinerario i1 > intensidadItinerario i2 = i1
+  | otherwise = i2
 
 ----
 
