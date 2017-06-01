@@ -1,4 +1,4 @@
-module NightClub1 where
+module NightClub where
 
 import Text.Show.Functions
 import Data.List

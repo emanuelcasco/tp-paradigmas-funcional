@@ -3,7 +3,7 @@ module NightClubSpec where
 import Test.Hspec
 import Control.Exception (evaluate)
 
-import NightClub1
+import NightClub
 import Text.Show.Functions
 import Data.List
 
